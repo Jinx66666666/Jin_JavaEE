@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        
+    </body>
+    <script>
+
+        $.ajax({
+            url:app.root+"/customer/loadCorpAccount1?corpID="+corpID,
+            type:"post",
+            dataType:"json",
+            success:function(data){
+                $("#transLines").html('');
+                data=data.data;
+                for(var i=0;i<data.length;i++){
+                    /* alert(data[i].startAddr+"===="+data[i].endPlace)*/
+                    var tr=$("<tr/>");
+                    if(data[i].startAddr.indexOf("市") != -1 ){
+                        var str=data[i].startAddr.split("市")
+                        tr.append("<td>"+str[0]+"市"+"</td>");
+                    }
+                    else{
+                        tr.append("<td>"+data[i].startAddr+"</td>");
+                    }
+                    if(data[i].endPlace.indexOf(",") != -1){
+                        var endAddr =data[i].endPlace.split(",")
+                        var str3=""
+                        for(var m=0;m<endAddr.length;m++){
+                            if(endAddr[m].indexOf("市") != -1){
+                                var str2=endAddr[m].split("市")
+                                if(str3.indexOf(str2[0]) == -1){
+
+                                    str3+=str2[0]+","
+                                }
+                            }else{
+                                str3+=endAddr[m]+","
+                            }
+                        }
+                        tr.append("<td>"+str3+"</td>");
+                    }
+                    else if(data[i].endPlace.indexOf("市") != -1){
+                        var str1=data[i].endPlace.split("市")
+                        tr.append("<td>"+str1[0]+"市"+"</td>");
+                    }
+                    else{
+                        tr.append("<td>"+data[i].endPlace+"</td>");
+                    }
+                    $("#transLines").append(tr);
+                }
+            }
+        })
+    </script>
+</html>
